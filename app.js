@@ -170,16 +170,34 @@ function toMenuItems(rows) {
   return body
     .filter((row) => valueAt(row, indices.name))
     .filter((row) => isPublishedRow(valueAt(row, indices.published)))
-    .map((row) => ({
-      name: valueAt(row, indices.name),
-      brewery: valueAt(row, indices.brewery) || "蔵元情報なし",
-      flavor: valueAt(row, indices.flavor) || "コメント未設定",
-      temperature: valueAt(row, indices.temperature) || "指定なし",
-      type: valueAt(row, indices.type) || "未分類",
-      alcohol: valueAt(row, indices.alcohol) || "未設定",
-      polish: valueAt(row, indices.polish) || "未設定",
-      pairing: pairingList(valueAt(row, indices.pairing)),
-    }));
+    .map((row) => {
+      const brewery = valueAt(row, indices.brewery);
+      const prefecture = valueAt(row, indices.prefecture);
+      const hiire = valueAt(row, indices.hiire);
+      const sakamai = valueAt(row, indices.sakamai);
+      const explicitFlavor = valueAt(row, indices.flavor);
+      const explicitTemperature = valueAt(row, indices.temperature);
+      const explicitAlcohol = valueAt(row, indices.alcohol);
+      const explicitPairing = valueAt(row, indices.pairing);
+      const flavorParts = [valueAt(row, indices.type), hiire, sakamai, prefecture].filter(Boolean);
+
+      return {
+        name: valueAt(row, indices.name),
+        brewery: [brewery, prefecture].filter(Boolean).join(" / ") || "蔵元情報なし",
+        flavor:
+          explicitFlavor ||
+          (flavorParts.length > 0 ? flavorParts.join(" / ") : "コメント未設定"),
+        temperature: explicitTemperature || "冷酒から常温",
+        type: valueAt(row, indices.type) || "未分類",
+        alcohol: explicitAlcohol || "未設定",
+        polish: valueAt(row, indices.polish)
+          ? `${valueAt(row, indices.polish)}%`
+          : "未設定",
+        pairing: explicitPairing
+          ? pairingList(explicitPairing)
+          : [hiire, sakamai].filter(Boolean),
+      };
+    });
 }
 
 async function loadMenu() {
