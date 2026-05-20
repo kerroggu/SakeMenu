@@ -1,7 +1,6 @@
-const sheetConfig = {
+const menuConfig = {
   siteUrl: "https://kerroggu.github.io/SakeMenu/",
-  sheetId: "1uYTCXtAmor6ZzrItT2POE25LvmWec1D75Eaco3ZaDFA",
-  gid: "0",
+  menuCsvPath: "./menu.csv",
   columns: {
     name: ["name", "銘柄", "銘柄名", "酒名", "brand", "label"],
     brewery: ["brewery", "酒蔵", "蔵元", "酒造", "醸造元", "shuzou", "breweryname"],

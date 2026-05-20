@@ -2,22 +2,15 @@
 
 ホームパーティー用の日本酒メニューを GitHub Pages で公開するための静的サイトです。
 
-データ本体は Google スプレッドシートから読み込みます。
+データ本体はリポジトリ内の `menu.csv` から読み込みます。
 
 公開URLは通常、以下になります。
 
 `https://kerroggu.github.io/SakeMenu/`
 
-## スプレッドシート設定
+## CSV設定
 
-このURLのシートを読み込みます。
-
-`https://docs.google.com/spreadsheets/d/1uYTCXtAmor6ZzrItT2POE25LvmWec1D75Eaco3ZaDFA/edit?gid=0#gid=0`
-
-GitHub Pages から読めるように、少なくとも以下のどちらかが必要です。
-
-1. `共有` で `リンクを知っている全員が閲覧可`
-2. `ファイル` → `共有` → `ウェブに公開` でシートを公開
+`menu.csv` を編集すると、そのままメニューに反映されます。
 
 1行目は見出し行にしてください。最低限 `Name` か `銘柄` があれば表示対象になります。
 
@@ -37,7 +30,7 @@ GitHub Pages から読めるように、少なくとも以下のどちらかが�
 
 `ペアリング` 列は `、` `/` `,` 改行区切りで複数指定できます。
 
-今の英字ヘッダにもそのまま対応しています。
+今の `menu.csv` にはこの英字ヘッダを入れています。
 
 - `Name`
 - `Tsukuri`
@@ -57,9 +50,18 @@ GitHub Pages から読めるように、少なくとも以下のどちらかが�
 
 これらが空欄のときは、対応している銘柄について名前ベースの補完データを使います。
 
+## CSV編集例
+
+```csv
+Name,Tsukuri,Hiire,Sakamai,Prefecture,Shuzou,Seimai,Status,Flavor,Temperature,Pairing,Alcohol
+冩樂,純米吟醸,無濾過生原酒,八反錦,福島,宮泉銘醸,50,1,,,,
+風の森,純米,無濾過生原酒,秋津穂,奈良,油長酒造,65,1,ラムネっぽくフレッシュ,よく冷やして,枝豆/前菜,16%
+```
+
 ## 編集ポイント
 
-- シートIDや列名の別名は `data.js` を編集
+- CSVパスや列名の別名は `data.js` を編集
+- 銘柄データは `menu.csv` を編集
 - 見出しや説明文は `index.html` を編集
 - デザインは `styles.css` を編集
 

@@ -4,7 +4,7 @@ const siteLink = document.querySelector("#site-link");
 const qrImage = document.querySelector("#qr-image");
 
 function csvUrl() {
-  return `https://docs.google.com/spreadsheets/d/${sheetConfig.sheetId}/export?format=csv&gid=${sheetConfig.gid}`;
+  return menuConfig.menuCsvPath;
 }
 
 function renderMenuItem(item) {
@@ -125,7 +125,7 @@ function columnIndexMap(headers) {
   const normalizedHeaders = headers.map(normalizeHeader);
   const indices = {};
 
-  Object.entries(sheetConfig.columns).forEach(([key, aliases]) => {
+  Object.entries(menuConfig.columns).forEach(([key, aliases]) => {
     const normalizedAliases = aliases.map(normalizeHeader);
     indices[key] = normalizedHeaders.findIndex((header) =>
       normalizedAliases.includes(header),
@@ -227,7 +227,7 @@ async function loadMenu() {
   const response = await fetch(csvUrl());
 
   if (!response.ok) {
-    throw new Error(`sheet fetch failed: ${response.status}`);
+    throw new Error(`menu fetch failed: ${response.status}`);
   }
 
   const csvText = await response.text();
@@ -242,7 +242,7 @@ function setQrCode(url) {
 }
 
 async function init() {
-  setQrCode(sheetConfig.siteUrl);
+  setQrCode(menuConfig.siteUrl);
 
   try {
     const items = await loadMenu();
@@ -250,7 +250,7 @@ async function init() {
     if (items.length === 0) {
       renderStatus(
         "表示できる銘柄がありません",
-        "シートの1行目に見出しがあり、公開対象の行に銘柄名が入っているか確認してください。",
+        "CSVの1行目に見出しがあり、公開対象の行に銘柄名が入っているか確認してください。",
       );
       sakeCount.textContent = "0銘柄";
       return;
@@ -261,7 +261,7 @@ async function init() {
   } catch (error) {
     renderStatus(
       "スプレッドシートを読み込めませんでした",
-      "シートを一般公開し、CSVとして取得できる状態か確認してください。",
+      "menu.csv が存在し、GitHub Pages から取得できる状態か確認してください。",
     );
     sakeCount.textContent = "読込失敗";
     console.error(error);
