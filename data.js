@@ -4,6 +4,7 @@ const menuConfig = {
   columns: {
     name: ["name", "銘柄", "銘柄名", "酒名", "brand", "label"],
     searchName: ["searchname", "search_name", "検索名", "別名", "name2"],
+    image: ["image", "imagepath", "画像", "写真", "labelimage"],
     brewery: ["brewery", "酒蔵", "蔵元", "酒造", "醸造元", "shuzou", "breweryname"],
     flavor: ["flavor", "味わい", "コメント", "説明", "メモ", "description", "tastingnote", "note"],
     temperature: ["temperature", "温度", "おすすめ温度", "飲み方", "servingtemp", "recommendedtemp"],
@@ -43,6 +44,17 @@ const sakeLookup = {
     pairing: ["前菜", "白身魚", "軽い揚げ物"],
   },
   "横山五十 WHITE": {
+    aliases: ["横山五十 WHITE うすにごり生", "横山五十 white", "横山五十 うすにごり生"],
+    brewery: "重家酒造",
+    prefecture: "長崎",
+    flavor: "マスカットを思わせるみずみずしい香りと、ジューシーな甘みが出るタイプ。",
+    temperature: "冷酒",
+    type: "純米大吟醸",
+    alcohol: "16%",
+    polish: "50%",
+    pairing: ["白身魚カルパッチョ", "和食", "洋食"],
+  },
+  "横山五十 うすにごり 純米大吟醸": {
     aliases: ["横山五十 WHITE うすにごり生", "横山五十 white", "横山五十 うすにごり生"],
     brewery: "重家酒造",
     prefecture: "長崎",

@@ -18,6 +18,7 @@
 
 - `銘柄` または `name`
 - `検索名` または `searchname`
+- `画像` または `image`
 - `酒蔵` または `brewery`
 - `味わい` または `flavor`
 - `温度` または `temperature`
@@ -54,9 +55,9 @@
 ## CSV編集例
 
 ```csv
-Name,Tsukuri,Hiire,Sakamai,Prefecture,Shuzou,Seimai,Status,Flavor,Temperature,Pairing,Alcohol
-冩樂,写楽 / 冩樂 純米吟醸 無濾過生原酒,純米吟醸,無濾過生原酒,八反錦,福島,宮泉銘醸,50,1,,,,
-風の森 ALPHA 1,風の森 ALPHA 1 次章への扉,菩提酛,,秋津穂,奈良,油長酒造,70,1,ラムネっぽくフレッシュ,よく冷やして,枝豆/前菜,13%
+Name,SearchName,Image,Tsukuri,Hiire,Sakamai,Prefecture,Shuzou,Seimai,Status,Flavor,Temperature,Pairing,Alcohol
+千徳 夢の中まで,夢の中まで With your Dream 純米大吟醸,labels/sentoku-yumenonakamade.jpg,純米大吟醸,,山田錦,宮崎,千徳酒造,50,1,,,,
+風の森 ALPHA 1,風の森 ALPHA 1 次章への扉,labels/kazenomori-alpha1.jpg,純米,菩提酛/無濾過生原酒,秋津穂,奈良,油長酒造,65,1,ラムネっぽくフレッシュ,よく冷やして,枝豆/前菜,14%
 ```
 
 ## 編集ポイント

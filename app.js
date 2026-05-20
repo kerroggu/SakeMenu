@@ -14,6 +14,9 @@ function renderMenuItem(item) {
 
   return `
     <article class="menu-card">
+      <div class="label-media">
+        <img src="${item.image}" alt="${item.name} のラベル" loading="lazy" />
+      </div>
       <div class="menu-copy">
         <div class="menu-head">
           <h3>${item.name}</h3>
@@ -190,6 +193,7 @@ function toMenuItems(rows) {
       const name = valueAt(row, indices.name);
       const searchName = valueAt(row, indices.searchName);
       const lookup = lookupByName(name || searchName) || {};
+      const image = valueAt(row, indices.image);
       const brewery = valueAt(row, indices.brewery);
       const prefecture = valueAt(row, indices.prefecture);
       const hiire = valueAt(row, indices.hiire);
@@ -202,6 +206,7 @@ function toMenuItems(rows) {
 
       return {
         name,
+        image: image || "",
         brewery:
           [brewery || lookup.brewery, prefecture || lookup.prefecture]
             .filter(Boolean)
