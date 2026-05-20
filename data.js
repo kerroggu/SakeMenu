@@ -5,6 +5,7 @@ const menuConfig = {
     name: ["name", "銘柄", "銘柄名", "酒名", "brand", "label"],
     searchName: ["searchname", "search_name", "検索名", "別名", "name2"],
     image: ["image", "imagepath", "画像", "写真", "labelimage"],
+    price: ["price", "価格", "値段"],
     brewery: ["brewery", "酒蔵", "蔵元", "酒造", "醸造元", "shuzou", "breweryname"],
     flavor: ["flavor", "味わい", "コメント", "説明", "メモ", "description", "tastingnote", "note"],
     temperature: ["temperature", "温度", "おすすめ温度", "飲み方", "servingtemp", "recommendedtemp"],

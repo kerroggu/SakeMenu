@@ -28,6 +28,7 @@ function renderMenuItem(item) {
           <span class="pill"><strong>温度</strong>${item.temperature}</span>
           <span class="pill"><strong>度数</strong>${item.alcohol}</span>
           <span class="pill"><strong>精米歩合</strong>${item.polish}</span>
+          <span class="pill"><strong>価格</strong>${item.price}</span>
         </div>
       </div>
       <aside class="pairing-box">
@@ -194,6 +195,7 @@ function toMenuItems(rows) {
       const searchName = valueAt(row, indices.searchName);
       const lookup = lookupByName(name || searchName) || {};
       const image = valueAt(row, indices.image);
+      const price = valueAt(row, indices.price);
       const brewery = valueAt(row, indices.brewery);
       const prefecture = valueAt(row, indices.prefecture);
       const hiire = valueAt(row, indices.hiire);
@@ -207,6 +209,7 @@ function toMenuItems(rows) {
       return {
         name,
         image: image || "",
+        price: price || "-",
         brewery:
           [brewery || lookup.brewery, prefecture || lookup.prefecture]
             .filter(Boolean)

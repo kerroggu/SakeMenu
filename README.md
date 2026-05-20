@@ -19,6 +19,7 @@
 - `銘柄` または `name`
 - `検索名` または `searchname`
 - `画像` または `image`
+- `価格` または `price`
 - `酒蔵` または `brewery`
 - `味わい` または `flavor`
 - `温度` または `temperature`
@@ -55,9 +56,9 @@
 ## CSV編集例
 
 ```csv
-Name,SearchName,Image,Tsukuri,Hiire,Sakamai,Prefecture,Shuzou,Seimai,Status,Flavor,Temperature,Pairing,Alcohol
-千徳 夢の中まで,夢の中まで With your Dream 純米大吟醸,labels/sentoku-yumenonakamade.jpg,純米大吟醸,,山田錦,宮崎,千徳酒造,50,1,,,,
-風の森 ALPHA 1,風の森 ALPHA 1 次章への扉,labels/kazenomori-alpha1.jpg,純米,菩提酛/無濾過生原酒,秋津穂,奈良,油長酒造,65,1,ラムネっぽくフレッシュ,よく冷やして,枝豆/前菜,14%
+Name,SearchName,Image,Price,Tsukuri,Hiire,Sakamai,Prefecture,Shuzou,Seimai,Status,Flavor,Temperature,Pairing,Alcohol
+千徳 夢の中まで,夢の中まで With your Dream 純米大吟醸,labels/sentoku-yumenonakamade.jpg,2130円,純米大吟醸,,山田錦,宮崎,千徳酒造,50,1,,,,
+風の森 ALPHA 1,風の森 ALPHA 1 次章への扉,labels/kazenomori-alpha1.jpg,1980円,純米,菩提酛/無濾過生原酒,秋津穂,奈良,油長酒造,65,1,ラムネっぽくフレッシュ,よく冷やして,枝豆/前菜,14%
 ```
 
 ## 編集ポイント
