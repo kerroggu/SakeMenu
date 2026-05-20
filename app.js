@@ -159,6 +159,22 @@ function pairingList(value) {
     .filter(Boolean);
 }
 
+function normalizeSakeName(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[()（）\s]/g, "");
+}
+
+function lookupByName(name) {
+  const target = normalizeSakeName(name);
+
+  return Object.entries(sakeLookup).find(([key, entry]) => {
+    const candidates = [key, ...(entry.aliases || [])];
+    return candidates.some((candidate) => normalizeSakeName(candidate) === target);
+  })?.[1];
+}
+
 function toMenuItems(rows) {
   if (rows.length < 2) {
     return [];
@@ -171,6 +187,8 @@ function toMenuItems(rows) {
     .filter((row) => valueAt(row, indices.name))
     .filter((row) => isPublishedRow(valueAt(row, indices.published)))
     .map((row) => {
+      const name = valueAt(row, indices.name);
+      const lookup = lookupByName(name) || {};
       const brewery = valueAt(row, indices.brewery);
       const prefecture = valueAt(row, indices.prefecture);
       const hiire = valueAt(row, indices.hiire);
@@ -182,20 +200,25 @@ function toMenuItems(rows) {
       const flavorParts = [valueAt(row, indices.type), hiire, sakamai, prefecture].filter(Boolean);
 
       return {
-        name: valueAt(row, indices.name),
-        brewery: [brewery, prefecture].filter(Boolean).join(" / ") || "蔵元情報なし",
+        name,
+        brewery:
+          [brewery || lookup.brewery, prefecture || lookup.prefecture]
+            .filter(Boolean)
+            .join(" / ") || "蔵元情報なし",
         flavor:
           explicitFlavor ||
+          lookup.flavor ||
           (flavorParts.length > 0 ? flavorParts.join(" / ") : "コメント未設定"),
-        temperature: explicitTemperature || "冷酒から常温",
-        type: valueAt(row, indices.type) || "未分類",
-        alcohol: explicitAlcohol || "未設定",
-        polish: valueAt(row, indices.polish)
-          ? `${valueAt(row, indices.polish)}%`
-          : "未設定",
+        temperature: explicitTemperature || lookup.temperature || "冷酒から常温",
+        type: valueAt(row, indices.type) || lookup.type || "未分類",
+        alcohol: explicitAlcohol || lookup.alcohol || "未設定",
+        polish:
+          (valueAt(row, indices.polish)
+            ? `${valueAt(row, indices.polish)}%`
+            : lookup.polish) || "未設定",
         pairing: explicitPairing
           ? pairingList(explicitPairing)
-          : [hiire, sakamai].filter(Boolean),
+          : lookup.pairing || [hiire, sakamai].filter(Boolean),
       };
     });
 }
