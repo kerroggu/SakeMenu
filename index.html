@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>日本酒会メニュー</title>
+    <meta
+      name="description"
+      content="ホームパーティー向けの日本酒メニュー。QRコードからスマホで見られます。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">Sake Menu</p>
+        <h1>今夜の日本酒会</h1>
+        <p class="lead">
+          気になった一本を見つけたら、その場でチェック。味わい、温度帯、合わせたいつまみをまとめています。
+        </p>
+        <div class="hero-meta">
+          <span>会場: Home Party</span>
+          <span>形式: QRメニュー</span>
+          <span id="sake-count">0銘柄</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="section">
+          <div class="section-heading">
+            <p class="section-kicker">Quick Guide</p>
+            <h2>飲み方の目安</h2>
+          </div>
+          <div class="guide-grid">
+            <article class="guide-card">
+              <h3>軽やか</h3>
+              <p>乾杯向き。前半に飲むと香りの違いがわかりやすい。</p>
+            </article>
+            <article class="guide-card">
+              <h3>旨み系</h3>
+              <p>温度が少し上がると表情が出やすい。食中酒向き。</p>
+            </article>
+            <article class="guide-card">
+              <h3>デザート寄り</h3>
+              <p>甘みや余韻を楽しむタイプ。最後の一杯にもおすすめ。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-heading">
+            <p class="section-kicker">Tonight's Bottles</p>
+            <h2>銘柄リスト</h2>
+          </div>
+          <div id="menu-list" class="menu-list" aria-live="polite">
+            <article class="menu-card status-card">
+              <div class="menu-copy">
+                <h3>読み込み中</h3>
+                <p class="flavor">スプレッドシートからメニューを取得しています。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section qr-section">
+          <div class="section-heading">
+            <p class="section-kicker">Share</p>
+            <h2>このページをQRで開く</h2>
+          </div>
+          <div class="qr-card">
+            <div class="qr-frame">
+              <img
+                id="qr-image"
+                alt="このメニューサイトを開くQRコード"
+                loading="lazy"
+              />
+            </div>
+            <div class="qr-copy">
+              <p>GitHub Pagesで公開したURLをそのままQR化しています。</p>
+              <a id="site-link" class="site-link" href="#" target="_blank" rel="noreferrer"></a>
+              <p class="caption">印刷したい場合は、この画面をそのまま保存すれば使えます。</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
