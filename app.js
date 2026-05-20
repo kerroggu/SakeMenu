@@ -188,7 +188,8 @@ function toMenuItems(rows) {
     .filter((row) => isPublishedRow(valueAt(row, indices.published)))
     .map((row) => {
       const name = valueAt(row, indices.name);
-      const lookup = lookupByName(name) || {};
+      const searchName = valueAt(row, indices.searchName);
+      const lookup = lookupByName(name || searchName) || {};
       const brewery = valueAt(row, indices.brewery);
       const prefecture = valueAt(row, indices.prefecture);
       const hiire = valueAt(row, indices.hiire);
