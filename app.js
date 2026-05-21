@@ -4,7 +4,8 @@ const siteLink = document.querySelector("#site-link");
 const qrImage = document.querySelector("#qr-image");
 
 function csvUrl() {
-  return menuConfig.menuCsvPath;
+  const separator = menuConfig.menuCsvPath.includes("?") ? "&" : "?";
+  return `${menuConfig.menuCsvPath}${separator}v=${menuConfig.menuVersion}`;
 }
 
 function renderMenuItem(item) {
@@ -230,7 +231,7 @@ function toMenuItems(rows) {
 }
 
 async function loadMenu() {
-  const response = await fetch(csvUrl());
+  const response = await fetch(csvUrl(), { cache: "no-store" });
 
   if (!response.ok) {
     throw new Error(`menu fetch failed: ${response.status}`);
