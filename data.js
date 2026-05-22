@@ -2,7 +2,9 @@ const menuConfig = {
   siteUrl: "https://kerroggu.github.io/SakeMenu/",
   menuCsvPath: "./menu.csv",
   menuVersion: "2026-05-21-gakki-alterna",
+  gasAppUrl: "",
   columns: {
+    id: ["id", "itemid", "slug"],
     name: ["name", "銘柄", "銘柄名", "酒名", "brand", "label"],
     searchName: ["searchname", "search_name", "検索名", "別名", "name2"],
     image: ["image", "imagepath", "画像", "写真", "labelimage"],
@@ -15,6 +17,8 @@ const menuConfig = {
     polish: ["polish", "精米歩合", "seimai", "ricepolish"],
     pairing: ["pairing", "ペアリング", "合わせたいもの", "つまみ", "おすすめ料理", "foodpairing", "pairingnote"],
     published: ["published", "公開", "掲載", "表示", "status", "visible"],
+    orderEnabled: ["orderenabled", "注文受付", "注文可", "order", "ordering"],
+    soldOut: ["soldout", "売切れ", "売り切れ", "在庫切れ"],
     hiire: ["hiire", "火入れ"],
     sakamai: ["sakamai", "酒米", "rice"],
     prefecture: ["prefecture", "都道府県", "産地", "origin"],

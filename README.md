@@ -2,6 +2,8 @@
 
 ホームパーティー用の日本酒メニューを GitHub Pages で公開するための静的サイトです。
 
+見た目重視の軽い注文機能と星評価を載せられるようにしてあります。
+
 データ本体はリポジトリ内の `menu.csv` から読み込みます。
 
 公開URLは通常、以下になります。
@@ -16,6 +18,7 @@
 
 おすすめ列は以下です。
 
+- `id`
 - `銘柄` または `name`
 - `検索名` または `searchname`
 - `画像` または `image`
@@ -28,6 +31,8 @@
 - `精米歩合` または `polish`
 - `ペアリング` または `pairing`
 - `公開` または `published`
+- `注文受付` または `orderEnabled`
+- `売切れ` または `soldOut`
 
 `公開` 列は任意です。空欄または `true` 系なら表示し、`false` `0` `非表示` なら出しません。
 
@@ -51,14 +56,26 @@
 - `Pairing` または `おすすめ料理`
 - `Alcohol` または `アルコール度数`
 
+注文・評価用に追加できる列です。
+
+- `id`
+- `orderEnabled`
+- `soldOut`
+
+`id` がない場合は、表示名から自動生成します。
+
+`orderEnabled` は空欄または `true` 系なら注文可能、`false` `0` `stop` なら受付停止です。
+
+`soldOut` は `true` `1` `売切れ` などで注文不可表示になります。
+
 これらが空欄のときは、対応している銘柄について名前ベースの補完データを使います。
 
 ## CSV編集例
 
 ```csv
-Name,SearchName,Image,Price,Tsukuri,Hiire,Sakamai,Prefecture,Shuzou,Seimai,Status,Flavor,Temperature,Pairing,Alcohol
-千徳 夢の中まで,夢の中まで With your Dream 純米大吟醸,labels/sentoku-yumenonakamade.jpg,2130円,純米大吟醸,,山田錦,宮崎,千徳酒造,50,1,,,,
-風の森 ALPHA 1,風の森 ALPHA 1 次章への扉,labels/kazenomori-alpha1.jpg,1980円,純米,菩提酛/無濾過生原酒,秋津穂,奈良,油長酒造,65,1,ラムネっぽくフレッシュ,よく冷やして,枝豆/前菜,14%
+Id,Name,SearchName,Image,Price,Tsukuri,Hiire,Sakamai,Prefecture,Shuzou,Seimai,Status,Flavor,Temperature,Pairing,Alcohol,OrderEnabled,SoldOut
+sentoku-dream,千徳 夢の中まで,夢の中まで With your Dream 純米大吟醸,labels/sentoku-yumenonakamade.jpg,2130円,純米大吟醸,,山田錦,宮崎,千徳酒造,50,1,,,,,true,false
+kazenomori-alpha1,風の森 ALPHA 1,風の森 ALPHA 1 次章への扉,labels/kazenomori-alpha1.jpg,1980円,純米,菩提酛/無濾過生原酒,秋津穂,奈良,油長酒造,65,1,ラムネっぽくフレッシュ,よく冷やして,枝豆/前菜,14%,true,false
 ```
 
 ## 編集ポイント
@@ -67,6 +84,37 @@ Name,SearchName,Image,Price,Tsukuri,Hiire,Sakamai,Prefecture,Shuzou,Seimai,Statu
 - 銘柄データは `menu.csv` を編集
 - 見出しや説明文は `index.html` を編集
 - デザインは `styles.css` を編集
+- GAS サンプルは `gas/Code.gs`
+
+## 注文と評価
+
+このサイトでは、各銘柄カードで以下を扱います。
+
+- `注文する`
+- `★1〜5` の評価
+- `今夜の人気` ランキング
+
+厳密な在庫管理や本人確認はしていません。ホームパーティー向けの軽い導線です。
+
+## GAS / スプレッドシート
+
+`gas/Code.gs` を Apps Script に貼り付けて Web アプリとして公開すると、注文と評価を保存できます。
+
+必要なシートは以下です。存在しなければ自動で作成します。
+
+- `orders`
+- `ratings`
+
+フロント側では `data.js` の `gasAppUrl` にデプロイした URL を設定します。
+
+```js
+const menuConfig = {
+  ...
+  gasAppUrl: "https://script.google.com/macros/s/xxxxxx/exec",
+};
+```
+
+`gasAppUrl` が空欄のままでも、ローカル保存ベースの簡易デモとして UI は動きます。
 
 ## GitHub Pages 公開手順
 

@@ -32,6 +32,29 @@
       </header>
 
       <main>
+        <section class="section utility-section">
+          <div class="section-heading">
+            <p class="section-kicker">Party Mode</p>
+            <h2>今夜の参加設定</h2>
+          </div>
+          <div class="party-toolbar">
+            <label class="nickname-field" for="nickname-input">
+              <span>ニックネーム</span>
+              <input
+                id="nickname-input"
+                type="text"
+                maxlength="20"
+                placeholder="例: jmdh"
+                autocomplete="nickname"
+              />
+            </label>
+            <button id="nickname-save" class="action-button action-button-primary" type="button">
+              参加名を保存
+            </button>
+            <p id="nickname-status" class="toolbar-note">注文と評価の前に、名前だけ入れてください。</p>
+          </div>
+        </section>
+
         <section class="section">
           <div class="section-heading">
             <p class="section-kicker">Quick Guide</p>
@@ -49,6 +72,19 @@
             <article class="guide-card">
               <h3>デザート寄り</h3>
               <p>甘みや余韻を楽しむタイプ。最後の一杯にもおすすめ。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-heading">
+            <p class="section-kicker">Live Ranking</p>
+            <h2>今夜の人気</h2>
+          </div>
+          <div id="summary-list" class="summary-list">
+            <article class="summary-card">
+              <strong>集計を準備中</strong>
+              <p>評価が入ると、ここに人気銘柄が並びます。</p>
             </article>
           </div>
         </section>
@@ -90,6 +126,8 @@
         </section>
       </main>
     </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script src="data.js"></script>
     <script src="app.js"></script>

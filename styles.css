@@ -151,7 +151,8 @@ h3 {
 }
 
 .guide-grid,
-.menu-list {
+.menu-list,
+.summary-list {
   display: grid;
   gap: 16px;
 }
@@ -162,7 +163,8 @@ h3 {
 
 .guide-card,
 .menu-card,
-.qr-card {
+.qr-card,
+.summary-card {
   border: 1px solid var(--line);
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.62);
@@ -176,9 +178,71 @@ h3 {
 .guide-card p,
 .menu-copy p,
 .qr-copy p,
-.caption {
+.caption,
+.summary-card p,
+.toolbar-note {
   color: var(--muted);
   line-height: 1.7;
+}
+
+.utility-section {
+  padding-bottom: 18px;
+}
+
+.party-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-end;
+}
+
+.nickname-field {
+  display: grid;
+  gap: 8px;
+  min-width: min(100%, 280px);
+  flex: 1 1 280px;
+}
+
+.nickname-field span,
+.action-label {
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nickname-field input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ink);
+  font: inherit;
+}
+
+.toolbar-note {
+  margin: 0;
+  min-height: 24px;
+  align-self: center;
+}
+
+.summary-list {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.summary-card {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+}
+
+.summary-rank {
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .menu-card {
@@ -186,6 +250,10 @@ h3 {
   grid-template-columns: 180px minmax(0, 1fr) 220px;
   gap: 18px;
   padding: 20px;
+}
+
+.menu-card.is-sold-out {
+  opacity: 0.82;
 }
 
 .label-media {
@@ -238,6 +306,98 @@ h3 {
   margin-right: 0.35em;
 }
 
+.action-panel {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.order-box,
+.rating-box {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 250, 245, 0.72);
+}
+
+.action-copy {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 14px;
+  align-items: baseline;
+}
+
+.action-copy strong {
+  font-family: "Zen Old Mincho", serif;
+  font-size: 1rem;
+}
+
+.action-button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    opacity 120ms ease,
+    background-color 120ms ease;
+}
+
+.action-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.action-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.action-button-primary {
+  color: #fffaf6;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+}
+
+.stars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.star-button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #b8a28f;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    color 120ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.star-button:hover,
+.star-button.is-active {
+  transform: translateY(-1px);
+  color: #fff4d6;
+  border-color: rgba(163, 63, 47, 0.24);
+  background: linear-gradient(135deg, #d08f42 0%, #e5b55e 100%);
+}
+
+.rating-note {
+  margin: 0;
+}
+
 .pairing-box {
   display: flex;
   flex-direction: column;
@@ -288,6 +448,31 @@ h3 {
   word-break: break-all;
 }
 
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  z-index: 20;
+  min-width: min(90vw, 280px);
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(31, 26, 23, 0.92);
+  color: #fff9f4;
+  text-align: center;
+  box-shadow: 0 12px 36px rgba(31, 26, 23, 0.28);
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
 @media (max-width: 760px) {
   .page-shell {
     width: min(100% - 20px, 1120px);
@@ -307,5 +492,18 @@ h3 {
 
   .pairing-box {
     padding: 16px;
+  }
+
+  .party-toolbar {
+    align-items: stretch;
+  }
+
+  .action-button-primary {
+    width: 100%;
+  }
+
+  .action-copy {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
