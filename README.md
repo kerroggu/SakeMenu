@@ -105,6 +105,11 @@ kazenomori-alpha1,風の森 ALPHA 1,風の森 ALPHA 1 次章への扉,labels/kaz
 - `orders`
 - `ratings`
 
+最初に手でシートを作っておきたい場合は、以下をそのままスプレッドシートに貼れます。
+
+- [gas/orders.sample.csv](/home/jmdh/wk/SakeMenu/gas/orders.sample.csv)
+- [gas/ratings.sample.csv](/home/jmdh/wk/SakeMenu/gas/ratings.sample.csv)
+
 フロント側では `data.js` の `gasAppUrl` にデプロイした URL を設定します。
 
 ```js

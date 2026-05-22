@@ -2,7 +2,8 @@ const menuConfig = {
   siteUrl: "https://kerroggu.github.io/SakeMenu/",
   menuCsvPath: "./menu.csv",
   menuVersion: "2026-05-21-gakki-alterna",
-  gasAppUrl: "",
+  gasAppUrl:
+    "https://script.google.com/macros/s/AKfycbxtBbc4aiLfSAboW2qLXBqWFq-GyBjMNs_E0NKd6c22sB7SFQsnzX83vEeU4xjByhGYzQ/exec",
   columns: {
     id: ["id", "itemid", "slug"],
     name: ["name", "銘柄", "銘柄名", "酒名", "brand", "label"],
