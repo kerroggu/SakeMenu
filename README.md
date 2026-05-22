@@ -68,6 +68,8 @@
 
 `soldOut` は `true` `1` `売切れ` などで注文不可表示になります。
 
+ただし、現在のおすすめ運用では `soldOut` と `orderEnabled` はスプレッドシート側の `menu` シートで上書き管理します。
+
 これらが空欄のときは、対応している銘柄について名前ベースの補完データを使います。
 
 ## CSV編集例
@@ -102,13 +104,28 @@ kazenomori-alpha1,風の森 ALPHA 1,風の森 ALPHA 1 次章への扉,labels/kaz
 
 必要なシートは以下です。存在しなければ自動で作成します。
 
+- `menu`
 - `orders`
 - `ratings`
 
 最初に手でシートを作っておきたい場合は、以下をそのままスプレッドシートに貼れます。
 
+- [gas/menu.sample.csv](/home/jmdh/wk/SakeMenu/gas/menu.sample.csv)
 - [gas/orders.sample.csv](/home/jmdh/wk/SakeMenu/gas/orders.sample.csv)
 - [gas/ratings.sample.csv](/home/jmdh/wk/SakeMenu/gas/ratings.sample.csv)
+
+`menu` シートは、売切れや受付停止の管理用です。最低限これだけあれば動きます。
+
+```csv
+id,soldOut,orderEnabled
+sentoku-dream,false,true
+kazenomori-alpha1,true,true
+```
+
+おすすめは `soldOut` と `orderEnabled` をスプレッドシートのチェックボックス列にすることです。スマホの Google スプレッドシートアプリから切り替えやすくなります。
+
+- `soldOut` を `true` にすると、銘柄は表示したまま注文ボタンが無効化され、リスト下部へ移動します
+- `orderEnabled` を `false` にすると、売切れではなく `受付停止` として表示します
 
 フロント側では `data.js` の `gasAppUrl` にデプロイした URL を設定します。
 
@@ -120,6 +137,23 @@ const menuConfig = {
 ```
 
 `gasAppUrl` が空欄のままでも、ローカル保存ベースの簡易デモとして UI は動きます。
+
+## Discord 通知
+
+注文が入ったら Discord に通知する実装を入れています。
+
+Apps Script 側で `プロジェクトの設定` → `スクリプト プロパティ` に以下を追加してください。
+
+- キー: `DISCORD_WEBHOOK_URL`
+- 値: Discord の Incoming Webhook URL
+
+Webhook を設定すると、注文のたびに Discord に以下が投稿されます。
+
+- 参加名
+- 銘柄
+- 注文時刻
+
+Webhook が未設定でも、注文・評価の保存自体は動きます。
 
 ## GitHub Pages 公開手順
 

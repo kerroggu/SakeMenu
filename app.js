@@ -14,6 +14,7 @@ const storageKeys = {
 };
 
 const state = {
+  baseItems: [],
   items: [],
   summaryBySakeId: {},
   nickname: readStorage(storageKeys.nickname, ""),
@@ -21,6 +22,7 @@ const state = {
 };
 
 let toastTimer = null;
+let liveRefreshTimer = null;
 
 function csvUrl() {
   const separator = menuConfig.menuCsvPath.includes("?") ? "&" : "?";
@@ -229,6 +231,16 @@ function ratingSummary(item) {
   }
 
   return `★${summary.average.toFixed(1)} (${summary.count}件)`;
+}
+
+function sortedItems(items) {
+  return [...items].sort((left, right) => {
+    if (left.soldOut !== right.soldOut) {
+      return Number(left.soldOut) - Number(right.soldOut);
+    }
+
+    return left.sourceIndex - right.sourceIndex;
+  });
 }
 
 function orderStateLabel(item) {
@@ -452,22 +464,26 @@ function gasUrl(action) {
   return `${menuConfig.gasAppUrl}${separator}action=${encodeURIComponent(action)}`;
 }
 
+function gasUrlWithParams(action, payload = {}) {
+  const url = new URL(gasUrl(action));
+
+  Object.entries(payload).forEach(([key, value]) => {
+    if (value != null && value !== "") {
+      url.searchParams.set(key, value);
+    }
+  });
+
+  return url.toString();
+}
+
 async function gasRequest(action, payload = null) {
   if (!menuConfig.gasAppUrl) {
     return mockGasResponse(action, payload);
   }
 
-  const options = payload
-    ? {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ action, ...payload }),
-      }
-    : {
-        method: "GET",
-      };
-
-  const response = await fetch(payload ? menuConfig.gasAppUrl : gasUrl(action), options);
+  const response = await fetch(payload ? gasUrlWithParams(action, payload) : gasUrl(action), {
+    method: "GET",
+  });
 
   if (!response.ok) {
     throw new Error(`gas request failed: ${response.status}`);
@@ -477,6 +493,13 @@ async function gasRequest(action, payload = null) {
 }
 
 function mockGasResponse(action, payload) {
+  if (action === "menuStatus") {
+    return Promise.resolve({
+      ok: true,
+      items: [],
+    });
+  }
+
   if (action === "summary") {
     return Promise.resolve({
       ok: true,
@@ -535,6 +558,54 @@ async function refreshSummary() {
   }
 }
 
+async function refreshMenuStatus() {
+  try {
+    const result = await gasRequest("menuStatus");
+
+    if (!result.ok) {
+      throw new Error(result.error || "menu_status_failed");
+    }
+
+    const statusById = Object.fromEntries(
+      (result.items || []).map((item) => [
+        String(item.sakeId || "").trim(),
+        {
+          soldOut: Boolean(item.soldOut),
+          orderEnabled: item.orderEnabled !== false,
+        },
+      ]),
+    );
+
+    state.items = sortedItems(
+      state.baseItems.map((item) => {
+        const remote = statusById[item.id];
+
+        if (!remote) {
+          return { ...item };
+        }
+
+        return {
+          ...item,
+          soldOut: remote.soldOut,
+          orderEnabled: remote.soldOut ? false : remote.orderEnabled,
+        };
+      }),
+    );
+  } catch (error) {
+    console.warn("menu status refresh failed", error);
+    state.items = sortedItems(state.baseItems.map((item) => ({ ...item })));
+  }
+}
+
+async function refreshLiveData(options = {}) {
+  const { showRender = true } = options;
+  await Promise.all([refreshSummary(), refreshMenuStatus()]);
+
+  if (showRender) {
+    renderMenu();
+  }
+}
+
 function toMenuItems(rows) {
   if (rows.length < 2) {
     return [];
@@ -564,6 +635,7 @@ function toMenuItems(rows) {
 
       return {
         id,
+        sourceIndex: itemIndex,
         name,
         image: image || "",
         brewery:
@@ -690,9 +762,15 @@ async function init() {
   renderNickname();
 
   try {
-    state.items = await loadMenu();
-    await refreshSummary();
+    state.baseItems = await loadMenu();
+    state.items = sortedItems(state.baseItems.map((item) => ({ ...item })));
+    await refreshLiveData({ showRender: false });
     renderAll();
+    liveRefreshTimer = window.setInterval(() => {
+      refreshLiveData().catch((error) => {
+        console.warn("live refresh failed", error);
+      });
+    }, 30000);
   } catch (error) {
     renderStatus(
       "スプレッドシートを読み込めませんでした",

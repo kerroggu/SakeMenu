@@ -1,13 +1,28 @@
 const SHEET_NAMES = {
+  menu: "menu",
   orders: "orders",
   ratings: "ratings",
 };
+
+const SCRIPT_PROPERTIES = PropertiesService.getScriptProperties();
 
 function doGet(e) {
   const action = (e.parameter.action || "").trim().toLowerCase();
 
   if (action === "summary") {
     return jsonResponse({ ok: true, items: buildSummary_() });
+  }
+
+  if (action === "menustatus") {
+    return jsonResponse({ ok: true, items: buildMenuStatus_() });
+  }
+
+  if (action === "order") {
+    return jsonResponse(createOrder_(e.parameter || {}));
+  }
+
+  if (action === "rating") {
+    return jsonResponse(saveRating_(e.parameter || {}));
   }
 
   return jsonResponse({
@@ -61,6 +76,8 @@ function createOrder_(payload) {
     sakeName,
     "new",
   ]);
+
+  notifyDiscordOrder_(nickname, sakeName);
 
   return {
     ok: true,
@@ -180,6 +197,33 @@ function buildSummary_() {
     });
 }
 
+function buildMenuStatus_() {
+  const sheet = getOrCreateSheet_(SHEET_NAMES.menu, [
+    "id",
+    "soldOut",
+    "orderEnabled",
+  ]);
+  const values = sheet.getDataRange().getValues();
+  const items = [];
+
+  for (let rowIndex = 1; rowIndex < values.length; rowIndex += 1) {
+    const row = values[rowIndex];
+    const sakeId = normalizeText_(row[0]);
+
+    if (!sakeId) {
+      continue;
+    }
+
+    items.push({
+      sakeId,
+      soldOut: toBoolean_(row[1], false),
+      orderEnabled: toBoolean_(row[2], true),
+    });
+  }
+
+  return items;
+}
+
 function getOrCreateSheet_(name, headers) {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = spreadsheet.getSheetByName(name);
@@ -198,6 +242,58 @@ function getOrCreateSheet_(name, headers) {
 
 function normalizeText_(value) {
   return String(value || "").trim();
+}
+
+function toBoolean_(value, fallback) {
+  if (value === "" || value == null) {
+    return fallback;
+  }
+
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  const normalized = normalizeText_(value).toLowerCase();
+
+  if (["true", "1", "yes", "on", "売切れ", "売り切れ"].includes(normalized)) {
+    return true;
+  }
+
+  if (["false", "0", "no", "off", "stop", "ng"].includes(normalized)) {
+    return false;
+  }
+
+  return fallback;
+}
+
+function notifyDiscordOrder_(nickname, sakeName) {
+  const webhookUrl = normalizeText_(SCRIPT_PROPERTIES.getProperty("DISCORD_WEBHOOK_URL"));
+
+  if (!webhookUrl) {
+    return;
+  }
+
+  const payload = {
+    username: "Sake Menu",
+    embeds: [
+      {
+        title: "新しい注文",
+        color: 0xa33f2f,
+        fields: [
+          { name: "参加名", value: nickname, inline: true },
+          { name: "銘柄", value: sakeName, inline: true },
+        ],
+        timestamp: new Date().toISOString(),
+      },
+    ],
+  };
+
+  UrlFetchApp.fetch(webhookUrl, {
+    method: "post",
+    contentType: "application/json; charset=utf-8",
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true,
+  });
 }
 
 function jsonResponse(payload) {
