@@ -572,24 +572,28 @@ async function refreshMenuStatus() {
         {
           soldOut: Boolean(item.soldOut),
           orderEnabled: item.orderEnabled !== false,
+          hidden: Boolean(item.hidden),
         },
       ]),
     );
 
     state.items = sortedItems(
-      state.baseItems.map((item) => {
-        const remote = statusById[item.id];
+      state.baseItems
+        .map((item) => {
+          const remote = statusById[item.id];
 
-        if (!remote) {
-          return { ...item };
-        }
+          if (!remote) {
+            return { ...item };
+          }
 
-        return {
-          ...item,
-          soldOut: remote.soldOut,
-          orderEnabled: remote.soldOut ? false : remote.orderEnabled,
-        };
-      }),
+          return {
+            ...item,
+            soldOut: remote.soldOut,
+            orderEnabled: remote.soldOut ? false : remote.orderEnabled,
+            hidden: remote.hidden,
+          };
+        })
+        .filter((item) => !item.hidden),
     );
   } catch (error) {
     console.warn("menu status refresh failed", error);
