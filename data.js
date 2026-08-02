@@ -1,7 +1,7 @@
 const menuConfig = {
   siteUrl: "https://kerroggu.github.io/SakeMenu/",
   menuCsvPath: "./menu.csv",
-  menuVersion: "2026-08-02-hodenasu",
+  menuVersion: "2026-08-02-mine",
   gasAppUrl:
     "https://script.google.com/macros/s/AKfycbwOUUUIrLGzmfSgOB8hCfr7AEDfM96b7lyGdHjBfKa1EVMPqqYO8QsnObEgNH-GXOEeeQ/exec",
   columns: {
