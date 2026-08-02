@@ -3,7 +3,7 @@ const menuConfig = {
   menuCsvPath: "./menu.csv",
   menuVersion: "2026-08-02-hodenasu",
   gasAppUrl:
-    "https://script.google.com/macros/s/AKfycbxtBbc4aiLfSAboW2qLXBqWFq-GyBjMNs_E0NKd6c22sB7SFQsnzX83vEeU4xjByhGYzQ/exec",
+    "https://script.google.com/macros/s/AKfycbwOUUUIrLGzmfSgOB8hCfr7AEDfM96b7lyGdHjBfKa1EVMPqqYO8QsnObEgNH-GXOEeeQ/exec",
   columns: {
     id: ["id", "itemid", "slug"],
     name: ["name", "銘柄", "銘柄名", "酒名", "brand", "label"],
