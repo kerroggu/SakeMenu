@@ -198,17 +198,15 @@ function buildSummary_() {
 }
 
 function buildMenuStatus_() {
-  const sheet = getOrCreateSheet_(SHEET_NAMES.menu, [
-    "id",
-    "soldOut",
-    "orderEnabled",
-  ]);
+  const menuSheet = getMenuStatusSheet_();
+  const sheet = menuSheet.sheet;
+  const columns = menuSheet.columns;
   const values = sheet.getDataRange().getValues();
   const items = [];
 
   for (let rowIndex = 1; rowIndex < values.length; rowIndex += 1) {
     const row = values[rowIndex];
-    const sakeId = normalizeText_(row[0]);
+    const sakeId = normalizeText_(row[columns.id]);
 
     if (!sakeId) {
       continue;
@@ -216,12 +214,57 @@ function buildMenuStatus_() {
 
     items.push({
       sakeId,
-      soldOut: toBoolean_(row[1], false),
-      orderEnabled: toBoolean_(row[2], true),
+      soldOut: toBoolean_(row[columns.soldOut], false),
+      orderEnabled: toBoolean_(row[columns.orderEnabled], true),
+      hidden: toBoolean_(row[columns.hidden], false),
     });
   }
 
   return items;
+}
+
+function getMenuStatusSheet_() {
+  const headers = ["id", "soldOut", "orderEnabled", "hidden"];
+  const sheet = getOrCreateSheet_(SHEET_NAMES.menu, headers);
+  const currentHeaders = sheet
+    .getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1))
+    .getValues()[0]
+    .map((value) => normalizeText_(value));
+  const currentHeaderKeys = currentHeaders.map((header) => header.toLowerCase());
+
+  headers.forEach((header) => {
+    const headerKey = header.toLowerCase();
+
+    if (!currentHeaderKeys.includes(headerKey)) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue(header);
+      currentHeaders.push(header);
+      currentHeaderKeys.push(headerKey);
+    }
+  });
+
+  const columns = Object.fromEntries(
+    headers.map((header) => [header, currentHeaderKeys.indexOf(header.toLowerCase())]),
+  );
+
+  ["soldOut", "orderEnabled", "hidden"].forEach((header) => {
+    ensureCheckboxColumn_(sheet, columns[header] + 1);
+  });
+
+  return { sheet, columns };
+}
+
+function ensureCheckboxColumn_(sheet, columnNumber) {
+  const firstDataCell = sheet.getRange(2, columnNumber);
+  const validation = firstDataCell.getDataValidation();
+  const checkboxCriteria = SpreadsheetApp.DataValidationCriteria.CHECKBOX;
+
+  if (validation && validation.getCriteriaType() === checkboxCriteria) {
+    return;
+  }
+
+  sheet
+    .getRange(2, columnNumber, Math.max(sheet.getMaxRows() - 1, 1), 1)
+    .insertCheckboxes();
 }
 
 function getOrCreateSheet_(name, headers) {
